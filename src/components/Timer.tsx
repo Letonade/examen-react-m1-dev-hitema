@@ -1,4 +1,7 @@
 import React, { Component, FormEvent } from 'react';
+import { ReduxState } from '../store';
+import { Dispatch } from 'redux';
+import { connect } from 'react-redux';
 
 import Display from './Display';
 
@@ -14,7 +17,7 @@ export interface TimeState {
 }
 
 interface DispatchProps {
-  onStop: () => void;
+  //onStop: () => void;
 }
 
 interface StateProps {
@@ -23,7 +26,7 @@ interface StateProps {
 
 type Props = DispatchProps & StateProps;
 
-class Timer extends Component<{}, TimeState> {
+class Timer extends Component<Props, TimeState> {
   interval: any;
   constructor(props: any) {
     super(props);
@@ -208,4 +211,13 @@ class Timer extends Component<{}, TimeState> {
   }
 }
 
-export default Timer;
+const mapStateToProps = (state: ReduxState): StateProps => {
+  return {
+    status: state.status,
+  };
+}
+
+export default connect<StateProps, DispatchProps , {}, ReduxState>(
+  mapStateToProps,
+)(Timer);
+//export default Timer;
