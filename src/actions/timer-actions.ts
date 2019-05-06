@@ -18,12 +18,3 @@ export const stopTimer = (): TimerActionTypes => {
   };
 }
 
-
-/*
-export const startTimer = (content: string): TimerActionTypes => {
-  return {
-    type: START_TIMER,
-    payload: content
-  };
-}*/
-
