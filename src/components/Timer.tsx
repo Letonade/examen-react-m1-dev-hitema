@@ -4,6 +4,9 @@ import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 
 import Display from './Display';
+import {TimerActionTypes} from "../action-types/timer-action-types";
+import { stopTimer} from "../actions/timer-actions";
+import {ControlsProps} from "./Controls";
 
 export type UnitOfTime = 'hours' | 'minutes' | 'seconds';
 
@@ -18,6 +21,7 @@ export interface TimeState {
 
 interface DispatchProps {
   //onStop: () => void;
+  ownStopTimer: () => void;
 }
 
 interface StateProps {
@@ -119,6 +123,7 @@ class Timer extends Component<Props, TimeState> {
       if (!this.canStart()) {
         if (this.state.status === 'started') {
           console.log('cannot start but start called');
+          this.props.ownStopTimer();
         }
         return;
       }
@@ -127,6 +132,7 @@ class Timer extends Component<Props, TimeState> {
       });
       if (this.state.timeInterval === 0) {
         console.log('countdown is over');
+        this.props.ownStopTimer();
       }
     }, 10);
   }
@@ -217,7 +223,16 @@ const mapStateToProps = (state: ReduxState): StateProps => {
   };
 }
 
+const mapDispatchToProps = (dispatch: Dispatch<TimerActionTypes>, ownProps: {}): DispatchProps => {
+  return {
+    ownStopTimer: () => {
+      dispatch(stopTimer())
+    }
+  }
+}
+
 export default connect<StateProps, DispatchProps , {}, ReduxState>(
   mapStateToProps,
+  mapDispatchToProps
 )(Timer);
 //export default Timer;
